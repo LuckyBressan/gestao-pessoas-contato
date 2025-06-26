@@ -82,11 +82,12 @@ export default function DataTable({ data, columns, loading, onEdit, onDelete }: 
   }
 
   return (
-    <div>
-      <div className="[&>div]:max-h-96 min-w-2xl">
+    <div className="h-full">
+      <div className="[&>div]:max-h-96 sm:min-w-2xl h-full">
         <Table
           className={`
-            [&_td]:border-border [&_th]:border-border border-separate border-spacing-0 [&_tfoot_td]:border-t [&_th]:border-b [&_tr]:border-none [&_tr:not(:last-child)_td]:border-b
+            [&_td]:border-border [&_th]:border-border border-separate border-spacing-0 [&_tfoot_td]:border-t 
+            [&_th]:border-b [&_tr]:border-none [&_tr:not(:last-child)_td]:border-b
           `}
         >
           <TableHeader className="bg-background/90 sticky top-0 z-10 backdrop-blur-xs">

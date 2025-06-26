@@ -60,8 +60,8 @@ export default function PessoasPage() {
             <section
                 key="section-table"
                 className={`
-                    border border-lochmara-300 py-12 px-12 rounded-xl
-                    shadow-2xl flex flex-col gap-6
+                    border border-lochmara-300 p-3 sm:p-6 rounded-xl
+                    shadow-2xl flex flex-col gap-6 overflow-hidden
                 `}
             >
                 <DataTable

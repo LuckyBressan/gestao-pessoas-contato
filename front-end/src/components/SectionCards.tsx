@@ -24,7 +24,7 @@ export default function SectionCards({
         >
             {
                 cards.map(({ Icon, ...card }) => (
-                    <Card>
+                    <Card key={`card-${card.title}`}>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">
                                 <Text as="h1" variant={'body-md-bold'}>
