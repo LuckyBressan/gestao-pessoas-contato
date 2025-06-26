@@ -25,7 +25,7 @@ export default function Header() {
     return (
         <header className="
             bg-lochmara-200 border border-lochmara-300 text-lochmara-950
-            mx-12 mb-6 px-6 py-3 rounded-md
+            px-6 py-3 rounded-md
             h-max
         ">
             <span className="

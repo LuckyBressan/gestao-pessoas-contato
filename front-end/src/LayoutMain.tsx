@@ -1,11 +1,12 @@
 import { Outlet } from "react-router";
-import Header from "./components/Header";
+import Navbar from "./components/Navbar";
 
 export default function LayoutMain() {
     return (
         <>
-            <Header />
-            <main className="px-12 grid">
+            {/* <Header /> */}
+            <Navbar />
+            <main className="grid grid-cols-1 grid-rows-[max-content_max-content_1fr] gap-6">
                 <Outlet/>
             </main>
         </>
