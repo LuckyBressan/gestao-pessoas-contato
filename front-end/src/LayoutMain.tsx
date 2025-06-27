@@ -6,7 +6,7 @@ export default function LayoutMain() {
         <>
             {/* <Header /> */}
             <Navbar />
-            <main className="grid grid-cols-1 grid-rows-[max-content_max-content_1fr] gap-6">
+            <main className="grid grid-cols-1 grid-rows-[max-content_max-content_1fr] row-start-2 gap-6">
                 <Outlet/>
             </main>
         </>

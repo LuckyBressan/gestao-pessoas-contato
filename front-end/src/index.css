@@ -58,7 +58,11 @@
 
 :root {
 
-  --grid-template-rows-main: 4rem calc(100% - 4rem);
+  /* total disponivel - tamanho do header - padding */
+  --grid-template-rows-main: 4rem calc(100% - 4rem - calc(var(--spacing) * 6));
+  --grid-template-rows-main-sm: 4rem max-content;
+
+  --width-header-sm: calc(100% - calc(var(--spacing) * 6));
 
   --radius: 0.625rem;
   --background: oklch(1 0 0);

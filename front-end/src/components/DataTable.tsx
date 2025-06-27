@@ -6,6 +6,8 @@ import { MoreHorizontal, Edit, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import AlertDelete from "./AlertDelete"
+import { useState } from "react"
 
 export interface Column {
   key: string
@@ -13,12 +15,8 @@ export interface Column {
   render?: (value: any, row: any) => React.ReactNode
 }
 
-export type DataType = {
-  [K in string]: string | number;
-};
-
-interface DataTableProps {
-  data: DataType[],
+export interface DataTableProps {
+  data: any[],
   columns: Column[]
   loading?: boolean
   onEdit: (id: number) => void
@@ -26,6 +24,14 @@ interface DataTableProps {
 }
 
 export default function DataTable({ data, columns, loading, onEdit, onDelete }: DataTableProps) {
+
+  const [openDialog, setOpenDialog] = useState(false)
+
+  const handleDelete = (id: number) => {
+    setOpenDialog(false)
+    onDelete(id)
+  }
+
   if (loading) {
     return (
       <div className="rounded-md border">
@@ -86,7 +92,7 @@ export default function DataTable({ data, columns, loading, onEdit, onDelete }: 
       <div className="[&>div]:max-h-96 sm:min-w-2xl h-full">
         <Table
           className={`
-            [&_td]:border-border [&_th]:border-border border-separate border-spacing-0 [&_tfoot_td]:border-t 
+            [&_td]:border-border [&_th]:border-border border-separate border-spacing-0 [&_tfoot_td]:border-t
             [&_th]:border-b [&_tr]:border-none [&_tr:not(:last-child)_td]:border-b
           `}
         >
@@ -119,10 +125,20 @@ export default function DataTable({ data, columns, loading, onEdit, onDelete }: 
                         <Edit className="mr-2 h-4 w-4" />
                         Editar
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => onDelete(row.id as number)} className="text-lochmara-600">
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        Excluir
-                      </DropdownMenuItem>
+                      <AlertDelete
+                        open={openDialog}
+                        onDelete={() => handleDelete(row.id as number)}
+                        onCancel={() => setOpenDialog(false)}
+                      >
+                        <DropdownMenuItem onClick={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          setOpenDialog(true)
+                        }} className="text-lochmara-600">
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Excluir
+                        </DropdownMenuItem>
+                      </AlertDelete>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>
