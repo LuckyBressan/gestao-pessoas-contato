@@ -1,0 +1,106 @@
+{
+  "people": [
+    {
+      "id": 1,
+      "nome": "João Silva",
+      "cpf": "123.456.789-00",
+      "contatos": []
+    },
+    {
+      "id": "2",
+      "nome": "Ana Beatriz Souza",
+      "cpf": "234.567.890-11",
+      "contatos": []
+    },
+    {
+      "id": "3",
+      "nome": "Carlos Eduardo Lima",
+      "cpf": "345.678.901-22",
+      "contatos": []
+    },
+    {
+      "id": "4",
+      "nome": "Fernanda Oliveira",
+      "cpf": "456.789.012-33",
+      "contatos": []
+    },
+    {
+      "id": "5",
+      "nome": "Mariana Costa",
+      "cpf": "567.890.123-44",
+      "contatos": []
+    },
+    {
+      "id": "6",
+      "nome": "Pedro Henrique Martins",
+      "cpf": "678.901.234-55"
+    },
+    {
+      "id": "7",
+      "nome": "Lucas Bressan",
+      "cpf": "03220334032"
+    }
+  ],
+  "contacts": [
+    {
+      "id": "1",
+      "tipo": 2,
+      "descricao": "joao.silva@gmail.com",
+      "idPessoa": 1
+    },
+    {
+      "id": "2",
+      "tipo": 1,
+      "descricao": "(11) 91234-5678",
+      "idPessoa": "2"
+    },
+    {
+      "id": "3",
+      "tipo": 2,
+      "descricao": "carlos.lima@email.com",
+      "idPessoa": "3"
+    },
+    {
+      "id": "4",
+      "tipo": 1,
+      "descricao": "(21) 99876-5432",
+      "idPessoa": "4"
+    },
+    {
+      "id": "5",
+      "tipo": 2,
+      "descricao": "mariana.costa@email.com",
+      "idPessoa": "5"
+    },
+    {
+      "id": "5",
+      "tipo": 2,
+      "descricao": "mariana.costa@email.com",
+      "idPessoa": "5"
+    },
+    {
+      "id": "5",
+      "tipo": 2,
+      "descricao": "mariana.costa@email.com",
+      "idPessoa": "5"
+    },
+    {
+      "id": "5",
+      "tipo": 2,
+      "descricao": "mariana.costa@email.com",
+      "idPessoa": "5"
+    },
+    {
+      "id": "5",
+      "tipo": 2,
+      "descricao": "mariana.costa@email.com",
+      "idPessoa": "5"
+    },
+    {
+      "id": "6",
+      "tipo": 1,
+      "descricao": "(31) 98765-4321",
+      "idPessoa": "6"
+    }
+  ]
+}
