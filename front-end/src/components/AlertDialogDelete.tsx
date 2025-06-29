@@ -13,21 +13,28 @@ import {
 } from "@/components/ui/alert-dialog"
 import type { JSX } from "react";
 
-interface AlertDeleteProps {
+interface AlertDialogDeleteProps {
   open    : boolean;
   children: JSX.Element;
   onDelete: () => void;
   onCancel: () => void;
 }
 
-export default function AlertDelete({
+export default function AlertDialogDelete({
   open,
   children,
   onDelete,
   onCancel
-} : AlertDeleteProps) {
+} : AlertDialogDeleteProps) {
   return (
-    <AlertDialog open={open}>
+    <AlertDialog
+      open={open}
+      onOpenChange={(open) => {
+        if (!open) {
+          onCancel();
+        }
+      }}
+    >
       <AlertDialogTrigger asChild>
         {children}
       </AlertDialogTrigger>

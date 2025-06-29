@@ -2,19 +2,22 @@ import { PlusCircleIcon, Search } from "lucide-react";
 import InputFilter from "./InputFilter";
 import { Button } from "./ui/button";
 import DataTable, { type DataTableProps } from "./DataTable";
+import DialogForm from "./DialogForm";
+import Form from "./Form";
 
 interface SectionTableProps {
     tableProps: DataTableProps;
-    addNew    : () => void;
-    searchTerm: string;
-    setSearchTerm: (term: string) => void;
+    search: {
+      columnSearch: string;
+      searchTerm: string;
+      setSearchTerm: (term: string) => void;
+    }
+
 }
 
 export default function SectionTable({
+    search,
     tableProps,
-    addNew,
-    searchTerm,
-    setSearchTerm
 } : SectionTableProps) {
   return (
     <section
@@ -27,19 +30,28 @@ export default function SectionTable({
         <InputFilter
           type="text"
           Icon={Search}
-          placeholder="nome"
-          className="w-md"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder={search.columnSearch}
+          className="sm:w-md"
+          value={search.searchTerm}
+          onChange={(e) => search.setSearchTerm(e.target.value)}
         />
-        <Button onClick={addNew}>
-          <PlusCircleIcon
-            className="-ms-1 opacity-60"
-            size={16}
-            aria-hidden="true"
-          />
-          Incluir Pessoa
-        </Button>
+        <DialogForm
+          info={{
+            title       : "Incluir Registro",
+            description : "Informe os dados do novo registro.",
+            Icon        : PlusCircleIcon
+          }}
+          Form={<Form {...tableProps.formProps} />}
+        >
+          <Button >
+            <PlusCircleIcon
+              className="-ms-1 opacity-60"
+              size={16}
+              aria-hidden="true"
+            />
+            Incluir
+          </Button>
+        </DialogForm>
       </span>
       <DataTable {...tableProps} />
     </section>

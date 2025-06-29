@@ -10,7 +10,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { UserCircle } from "lucide-react"
 
 type NavigationLinkType = {
   href: string;
@@ -20,14 +19,17 @@ type NavigationLinkType = {
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
-  { href: "/", label: "Home", active: location.href.endsWith('/') },
   { href: "/pessoas", label: "Pessoas", active: location.href.includes('pessoas')  },
   { href: "/contatos", label: "Contatos", active: location.href.includes('contatos') },
 ] as NavigationLinkType[]
 
 export default function Navbar() {
   return (
-    <header className="border-b px-4 md:px-6 fixed sm:relative bg-background w-[var(--width-header-sm)] sm:w-full ">
+    <header className={`
+        bg-background border-b px-4 md:px-6
+        fixed sm:relative left-3 sm:left-0 top-3 sm:top-0
+         w-[var(--width-header-sm)] sm:w-full
+    `}>
       <div className="flex h-16 items-center justify-between gap-4">
         {/* Left side */}
         <div className="flex items-center gap-2">
@@ -87,7 +89,7 @@ export default function Navbar() {
           {/* Main nav */}
           <div className="flex items-center gap-6">
             <a href="#" className="text-primary hover:text-primary/90">
-              <UserCircle />
+              <img src="./images/logo.png" alt="logo da aplicação" className="w-10" />
             </a>
             {/* Navigation menu */}
             <NavigationMenu className="max-md:hidden">
@@ -107,15 +109,6 @@ export default function Navbar() {
             </NavigationMenu>
           </div>
         </div>
-        {/* Right side */}
-        {/* <div className="flex items-center gap-2">
-          <Button asChild variant="ghost" size="sm" className="text-sm">
-            <a href="#">Sign In</a>
-          </Button>
-          <Button asChild size="sm" className="text-sm">
-            <a href="#">Get Started</a>
-          </Button>
-        </div> */}
       </div>
     </header>
   )

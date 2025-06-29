@@ -5,7 +5,6 @@ import HomePage from "./pages/HomePage";
 import PeoplePage from "./pages/PeoplePage";
 import ContactsPage from "./pages/ContactsPage";
 
-
 export default function App() {
   return (
     <BrowserRouter>

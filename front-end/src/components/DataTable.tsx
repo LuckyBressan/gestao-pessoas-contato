@@ -1,36 +1,65 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { MoreHorizontal, Edit, Trash2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import AlertDelete from "./AlertDelete"
-import { useState } from "react"
+import { MoreHorizontal, Edit, Trash2, FilterX } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { useState } from "react";
+import AlertDialogDelete from "./AlertDialogDelete";
+import Text from "./Text";
+import DialogForm from "./DialogForm";
+import type { FormProps } from "./Form";
+import Form from "./Form";
 
 export interface Column {
-  key: string
-  label: string
-  render?: (value: any, row: any) => React.ReactNode
+  key: string;
+  label: string;
+  render?: (value: any, row: any) => React.ReactNode;
 }
 
 export interface DataTableProps {
-  data: any[],
-  columns: Column[]
-  loading?: boolean
-  onEdit: (id: number) => void
-  onDelete: (id: number) => void
+  data    : any[];
+  columns : Column[];
+  loading?: boolean;
+  formProps: FormProps;
+  onDelete: (id: number) => void;
 }
 
-export default function DataTable({ data, columns, loading, onEdit, onDelete }: DataTableProps) {
+interface DialogOpenState {
+  delete: boolean;
+  edit: boolean;
+}
 
-  const [openDialog, setOpenDialog] = useState(false)
+export default function DataTable({
+  data,
+  columns,
+  loading,
+  formProps,
+  onDelete
+}: DataTableProps) {
+  const [openDialog, setOpenDialog] = useState<DialogOpenState>({
+    delete: false,
+    edit: false,
+  });
 
   const handleDelete = (id: number) => {
-    setOpenDialog(false)
-    onDelete(id)
-  }
+    setOpenDialog((prev) => ({ ...prev, delete: false }));
+    onDelete(id);
+  };
 
   if (loading) {
     return (
@@ -60,7 +89,7 @@ export default function DataTable({ data, columns, loading, onEdit, onDelete }: 
           </TableBody>
         </Table>
       </div>
-    )
+    );
   }
 
   if (data.length === 0) {
@@ -77,25 +106,31 @@ export default function DataTable({ data, columns, loading, onEdit, onDelete }: 
           </TableHeader>
           <TableBody>
             <TableRow>
-              <TableCell colSpan={columns.length + 1} className="h-24 text-center">
-                Nenhum resultado encontrado.
+              <TableCell
+                colSpan={columns.length + 1}
+                className="h-24 text-center">
+                <div className="flex flex-col items-center justify-center gap-3 p-6">
+                  <FilterX className="text-lochmara-600" size={40} />
+                  <Text as="h1" variant={"body-md-bold"}>
+                    Nenhum resultado encontrado.
+                  </Text>
+                </div>
               </TableCell>
             </TableRow>
           </TableBody>
         </Table>
       </div>
-    )
+    );
   }
 
   return (
-    <div className="h-full">
-      <div className="[&>div]:max-h-96 sm:min-w-2xl h-full">
+    <div className="h-full overflow-hidden">
+      <div className=" sm:min-w-2xl h-full">
         <Table
           className={`
             [&_td]:border-border [&_th]:border-border border-separate border-spacing-0 [&_tfoot_td]:border-t
             [&_th]:border-b [&_tr]:border-none [&_tr:not(:last-child)_td]:border-b
-          `}
-        >
+          `}>
           <TableHeader className="bg-background/90 sticky top-0 z-10 backdrop-blur-xs">
             <TableRow className="hover:bg-transparent">
               {columns.map((column) => (
@@ -109,7 +144,9 @@ export default function DataTable({ data, columns, loading, onEdit, onDelete }: 
               <TableRow key={row.id}>
                 {columns.map((column) => (
                   <TableCell key={column.key}>
-                    {column.render ? column.render(row[column.key], row) : row[column.key]}
+                    {column.render
+                      ? column.render(row[column.key], row)
+                      : row[column.key]}
                   </TableCell>
                 ))}
                 <TableCell>
@@ -121,24 +158,48 @@ export default function DataTable({ data, columns, loading, onEdit, onDelete }: 
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => onEdit(row.id as number)}>
-                        <Edit className="mr-2 h-4 w-4" />
-                        Editar
-                      </DropdownMenuItem>
-                      <AlertDelete
-                        open={openDialog}
+                      <DialogForm
+                        info={{
+                          title: "Editar Registro",
+                          description:
+                            "Você pode editar os dados deste registro.",
+                          Icon: Edit,
+                        }}
+                        open={openDialog.edit}
+                        onCancel={() =>
+                          setOpenDialog((prev) => ({ ...prev, edit: false }))
+                        }
+                        Form={(<Form props={{ info: row }} {...formProps} />)}>
+                        <DropdownMenuItem
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setOpenDialog((prev) => ({ ...prev, edit: true }));
+                          }}>
+                          <Edit className="mr-2 h-4 w-4" />
+                          Editar
+                        </DropdownMenuItem>
+                      </DialogForm>
+                      <AlertDialogDelete
+                        open={openDialog.delete}
                         onDelete={() => handleDelete(row.id as number)}
-                        onCancel={() => setOpenDialog(false)}
-                      >
-                        <DropdownMenuItem onClick={(e) => {
-                          e.preventDefault()
-                          e.stopPropagation()
-                          setOpenDialog(true)
-                        }} className="text-lochmara-600">
+                        onCancel={() =>
+                          setOpenDialog((prev) => ({ ...prev, delete: false }))
+                        }>
+                        <DropdownMenuItem
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setOpenDialog((prev) => ({
+                              ...prev,
+                              delete: true,
+                            }));
+                          }}
+                          className="text-lochmara-600">
                           <Trash2 className="mr-2 h-4 w-4" />
                           Excluir
                         </DropdownMenuItem>
-                      </AlertDelete>
+                      </AlertDialogDelete>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>
@@ -148,5 +209,5 @@ export default function DataTable({ data, columns, loading, onEdit, onDelete }: 
         </Table>
       </div>
     </div>
-  )
+  );
 }
