@@ -51,6 +51,8 @@ function PeoplePageContent() {
     },
   ] as Column[];
 
+  const totalWithContacts = people.filter(person => !!person?.contatos?.length).length
+
   const cards = [
     {
       title: "Total de Pessoas",
@@ -62,13 +64,13 @@ function PeoplePageContent() {
       title: "Pessoas com Contatos",
       description: "Pessoas com contatos vinculados",
       Icon: MailCheck,
-      data: people.filter(person => !!person?.contatos?.length).length,
+      data: totalWithContacts,
     },
     {
       title: "Pessoas sem Contatos",
       description: "Pessoas sem contatos vinculados",
       Icon: MailX,
-      data: people.filter(person => !person?.contatos?.length).length,
+      data: (people.length - totalWithContacts),
     },
   ] as CardType[];
   return (

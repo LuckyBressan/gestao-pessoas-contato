@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import DataTable, { type DataTableProps } from "./DataTable";
 import DialogForm from "./DialogForm";
 import Form from "./Form";
+import { useState } from "react";
 
 interface SectionTableProps {
     tableProps: DataTableProps;
@@ -19,6 +20,11 @@ export default function SectionTable({
     search,
     tableProps,
 } : SectionTableProps) {
+
+  const [openDialog, setOpenDialog] = useState(false)
+
+  const { formProps } = tableProps
+
   return (
     <section
       key="section-table"
@@ -41,9 +47,21 @@ export default function SectionTable({
             description : "Informe os dados do novo registro.",
             Icon        : PlusCircleIcon
           }}
-          Form={<Form {...tableProps.formProps} />}
+          open={openDialog}
+          onCancel={() => setOpenDialog(false)}
+          Form={
+            <Form
+              props={{
+                ...formProps.props,
+                setOpenDialogForm: setOpenDialog 
+              }}
+              {...formProps }
+            />
+          }
         >
-          <Button >
+          <Button
+            onClick={() => setOpenDialog(true)}
+          >
             <PlusCircleIcon
               className="-ms-1 opacity-60"
               size={16}

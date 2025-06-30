@@ -8,13 +8,13 @@ import {
 
 import { cva, type VariantProps } from "class-variance-authority";
 
-export const AlertVariants = cva('', {
+export const AlertVariants = cva('z-[100] shadow', {
   variants: {
     variant: {
-      success: 'bg-emerald-50 border-emerald-500/50 px-4 py-3 text-emerald-600',
-      error  : 'bg-red-50 border-red-500/50 text-red-600',
-      warning: 'bg-amber-50 border-amber-500/50 text-amber-600',
-      info   : 'bg-blue-50 border-blue-500/50 text-blue-600'
+      success: 'bg-emerald-50 border-emerald-500 px-4 py-3 text-emerald-600',
+      error  : 'bg-red-50 border-red-500 text-red-600',
+      warning: 'bg-amber-50 border-amber-500 text-amber-600',
+      info   : 'bg-blue-50 border-blue-500 text-blue-600'
     }
   },
   defaultVariants: {

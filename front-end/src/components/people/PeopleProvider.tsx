@@ -9,7 +9,8 @@ import {
 import api from "@/services/api";
 import type { Person } from "@/@types/People";
 import { useAlert } from "../AlertProvider";
-import type { AxiosResponse } from "axios";
+import type { AxiosError, AxiosResponse } from "axios";
+import type { ErrorResponse } from "@/@types/Response";
 
 type PeopleContextType = {
   people: Person[];
@@ -49,6 +50,14 @@ export default function PeopleProvider({ children }: PeopleProviderProps) {
 
   const { showAlert } = useAlert();
 
+  const errorResponseDefault = (action: string) => {
+    return {
+      error: {
+        title: `Erro ao ${action} pessoa!`,
+      }
+    } as ErrorResponse
+  }
+
   const updatePeopleState = (data: Person, action?: UpdateStateAction) => {
     setPeople((prevPeople) => {
       //Se for ação de alterar, alteramos uma das pessoas salvas no state
@@ -79,20 +88,22 @@ export default function PeopleProvider({ children }: PeopleProviderProps) {
     }
     api
       .post("people", data)
-      .then(() => {
-        updatePeopleState(data);
+      .then((res: AxiosResponse<Person>) => {
+        updatePeopleState(res.data);
         showAlert({
           title: "Pessoa inserida com sucesso!",
           variant: "success",
         });
       })
-      .catch((err) => {
+      .catch((err: AxiosError<ErrorResponse>) => {
+        const data = err.response?.data
+        const { error } = (data ?? errorResponseDefault('incluir'))
+
         showAlert({
-          title: "Erro ao inserir pessoa!",
-          description: "Verifique o console.",
-          variant: "error",
+          ...error,
+          variant: 'error'
         });
-        console.error("Erro ao inserir pessoa:", err);
+        console.error(error.trace);
       });
   };
 
@@ -107,20 +118,22 @@ export default function PeopleProvider({ children }: PeopleProviderProps) {
     }
     api
       .put(`people/${data.id}`, data)
-      .then(() => {
-        updatePeopleState(data, { alterar: true });
+      .then((res: AxiosResponse<Person>) => {
+        updatePeopleState(res.data, { alterar: true });
         showAlert({
           title: "Pessoa atualizada com sucesso!",
           variant: "success",
         });
       })
-      .catch((err) => {
+      .catch((err: AxiosError<ErrorResponse>) => {
+        const data = err.response?.data
+        const { error } = (data ?? errorResponseDefault('alterar'))
+
         showAlert({
-          title: "Erro ao atualizar pessoa!",
-          description: "Verifique o console.",
-          variant: "error",
+          ...error,
+          variant: 'error'
         });
-        console.error("Erro ao atualizar pessoa:", err);
+        console.error(error.trace);
       });
   };
 
@@ -142,13 +155,15 @@ export default function PeopleProvider({ children }: PeopleProviderProps) {
           variant: "success",
         });
       })
-      .catch((err) => {
+      .catch((err: AxiosError<ErrorResponse>) => {
+        const data = err.response?.data
+        const { error } = (data ?? errorResponseDefault('deletar'))
+
         showAlert({
-          title: "Erro ao deletar pessoa!",
-          description: "Verifique o console.",
-          variant: "error",
+          ...error,
+          variant: 'error'
         });
-        console.error("Erro ao deletar pessoa:", err);
+        console.error(error.trace);
       });
   };
 

@@ -10,6 +10,8 @@ import api from "@/services/api";
 
 import { useAlert } from "../AlertProvider";
 import type { Contact } from "@/@types/Contacts";
+import type { ErrorResponse } from "@/@types/Response";
+import type { AxiosError, AxiosResponse } from "axios";
 
 type ContactsContextType = {
   contacts: Contact[];
@@ -41,6 +43,14 @@ export default function ContactsProvider({ children }: ContactsProviderProps) {
   const [contacts, setContacts] = useState<Contact[]>([]);
 
   const { showAlert } = useAlert()
+
+  const errorResponseDefault = (action: string) => {
+    return {
+      error: {
+        title: `Erro ao ${action} contato!`
+      }
+    } as ErrorResponse
+  }
 
   const updateContactsState = (data: Contact, action?: UpdateStateAction) => {
     setContacts((prevContacts) => {
@@ -76,20 +86,21 @@ export default function ContactsProvider({ children }: ContactsProviderProps) {
     }
     api
       .post("contacts", data)
-      .then(() => {
-        updateContactsState(data);
+      .then((res: AxiosResponse<Contact>) => {
+        updateContactsState(res.data);
         showAlert({
             title: "Contato inserido com sucesso!",
             variant: 'success'
         });
       })
-      .catch((err) => {
+      .catch((err: AxiosError<ErrorResponse>) => {
+        const data = err.response?.data
+        const { error } = (data ?? errorResponseDefault('incluir'))
         showAlert({
-            title: "Erro ao inserir contato!",
-            description: "Verifique o console.",
-            variant: 'error'
+          ...error,
+          variant: 'error'
         });
-        console.error("Erro ao inserir contato:", err);
+        console.error(error.trace);
       });
   };
 
@@ -110,13 +121,15 @@ export default function ContactsProvider({ children }: ContactsProviderProps) {
             variant: 'success'
         });
       })
-      .catch((err) => {
+      .catch((err: AxiosError<ErrorResponse>) => {
+        const data = err.response?.data
+        const { error } = (data ?? errorResponseDefault('alterar'))
+
         showAlert({
-            title: "Erro ao atualizar contato!",
-            description: "Verifique o console.",
-            variant: 'error'
+          ...error,
+          variant: 'error'
         });
-        console.error("Erro ao atualizar contato:", err);
+        console.error(error.trace);
       });
   };
 
@@ -140,13 +153,15 @@ export default function ContactsProvider({ children }: ContactsProviderProps) {
             variant: 'success'
         });
       })
-      .catch((err) => {
+      .catch((err: AxiosError<ErrorResponse>) => {
+        const data = err.response?.data
+        const { error } = (data ?? errorResponseDefault('excluir'))
+
         showAlert({
-            title: "Erro ao deletar pessoa!",
-            description: "Verifique o console.",
-            variant: 'error'
+          ...error,
+          variant: 'error'
         });
-        console.error("Erro ao deletar pessoa:", err);
+        console.error(error.trace);
       });
   };
 

@@ -1,14 +1,17 @@
+import { useState } from "react";
+
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
+
 import type { Person } from "@/@types/People";
 import { usePeopleContext } from "./PeopleProvider";
-import { useState } from "react";
 import CpfValidator from "@/validators/CpfValidator";
-import { unformatCpf } from "@/utils/cpfFormatter";
+import { formatCpf, unformatCpf } from "@/utils/cpfFormatter";
 
 export interface PeopleFormProps {
   info?: Person;
+  setOpenDialogForm: (open: boolean) => void
 }
 
 type ValidFormType = {
@@ -18,8 +21,9 @@ type ValidFormType = {
 
 export default function PeopleForm({
   info,
+  setOpenDialogForm
 }: PeopleFormProps) {
-  const { people, addPerson, updatePerson } = usePeopleContext()
+  const { addPerson, updatePerson } = usePeopleContext()
 
   const [valid, setValid] = useState<ValidFormType>({ valid: true })
 
@@ -44,16 +48,20 @@ export default function PeopleForm({
     ).value)
 
     const data = {
-      id: info?.id || (parseInt(people.at(-1)?.id || 0) + 1),
+      id: info?.id,
       nome: (
         e.currentTarget.elements.namedItem(`person-name`) as HTMLInputElement
       ).value,
       cpf: cpf
     } as Person;
+
     if(info) {
-      return updatePerson(data)
+      updatePerson(data)
+    } else {
+      addPerson(data)
     }
-    addPerson(data)
+
+    setOpenDialogForm(false)
   }
 
   const handleBlurCpf = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -95,7 +103,7 @@ export default function PeopleForm({
             <Input
               id={`person-cpf`}
               placeholder="xxx.xxx.xxx-xx"
-              defaultValue={info?.cpf}
+              defaultValue={info?.cpf ? formatCpf(info?.cpf) : ''}
               className="peer pe-9 [direction:inherit]"
               onBlur={handleBlurCpf}
               required

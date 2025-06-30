@@ -17,6 +17,7 @@ import SelectSearch from "../SelectSearch";
 
 export interface ContactsFormProps {
   info?: Contact;
+  setOpenDialogForm: (open: boolean) => void
 }
 
 type ValidFormType = {
@@ -24,15 +25,18 @@ type ValidFormType = {
   input?: string;
 };
 
-export default function ContactsForm({ info }: ContactsFormProps) {
-  const { contacts, addContact, updateContact } = useContactsContext();
+export default function ContactsForm({
+  info,
+  setOpenDialogForm
+}: ContactsFormProps) {
+  const { addContact, updateContact } = useContactsContext();
 
   const [valid, setValid] = useState<ValidFormType>({ valid: true });
   const [tipoContact, setTipoContact] = useState<EnumContactTipo>(
-    EnumContactTipo.TELEFONE
+    info?.tipo || EnumContactTipo.TELEFONE
   );
   const [people, setPeople] = useState<Person[]>([]);
-  const [valueSelectPerson, setValueSelectPerson] = useState(info?.idPessoa || '')
+  const [valueSelectPerson, setValueSelectPerson] = useState(String(info?.idPessoa || ''))
 
   useEffect(() => {
     loadPeople().then((res) => {
@@ -42,7 +46,7 @@ export default function ContactsForm({ info }: ContactsFormProps) {
 
   const isTipoTelefone = () => tipoContact == EnumContactTipo.TELEFONE;
 
-  const toggleClassInputValid = (input: HTMLInputElement, valid: boolean) => {
+  const toggleClassInputValid = (input: HTMLInputElement|HTMLSelectElement, valid: boolean) => {
     input.classList.toggle("input-invalid", valid);
   };
 
@@ -65,19 +69,23 @@ export default function ContactsForm({ info }: ContactsFormProps) {
     ).value;
 
     contact = isTipoTelefone() ? unformatPhone(contact) : contact;
+
     const data = {
-      id: info?.id || parseInt(contacts.at(-1)?.id|| 0) + 1,
-      tipo: parseInt(
+      id: info?.id,
+      tipo: Number(
         (e.currentTarget.elements.namedItem(`contact-tipo`) as HTMLInputElement)
           .value
       ),
       descricao: contact,
-      idPessoa: parseInt(valueSelectPerson as string),
+      idPessoa: Number(valueSelectPerson as string),
     } as Contact;
+
     if (info) {
-      return updateContact(data);
+      updateContact(data);
+    } else {
+      addContact(data);
     }
-    addContact(data);
+    setOpenDialogForm(false)
   };
 
   const handleBlurContact = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -97,6 +105,11 @@ export default function ContactsForm({ info }: ContactsFormProps) {
   };
 
   const handleChangeContactTipo = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const select = e.target;
+    if(!EnumContactTipo[Number(select.value)]) {
+      toggleClassInputValid(select, false)
+      return
+    }
     const input = e.target.parentElement?.nextElementSibling as HTMLInputElement;
     if(input) input.value = ''
     setTipoContact(parseInt(e.target.value))
@@ -132,7 +145,7 @@ export default function ContactsForm({ info }: ContactsFormProps) {
           placeholder="pessoa"
           label="Pessoas"
           setValue={setValueSelectPerson}
-          value={valueSelectPerson as string}
+          value={valueSelectPerson}
           items={
             people.map(person => {
               return {

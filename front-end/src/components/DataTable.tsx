@@ -63,7 +63,7 @@ export default function DataTable({
 
   if (loading) {
     return (
-      <div className="rounded-md border">
+      <div className="rounded-md">
         <Table>
           <TableHeader>
             <TableRow>
@@ -94,7 +94,7 @@ export default function DataTable({
 
   if (data.length === 0) {
     return (
-      <div className="rounded-md border">
+      <div className="rounded-md">
         <Table>
           <TableHeader>
             <TableRow>
@@ -169,7 +169,15 @@ export default function DataTable({
                         onCancel={() =>
                           setOpenDialog((prev) => ({ ...prev, edit: false }))
                         }
-                        Form={(<Form props={{ info: row }} {...formProps} />)}>
+                        Form={(
+                          <Form
+                            props={{
+                              info: row,
+                              setOpenDialogForm: (open) => { setOpenDialog((prev) => ({ ...prev, edit: open })) }
+                            }}
+                            {...formProps}
+                          />
+                        )}>
                         <DropdownMenuItem
                           onClick={(e) => {
                             e.preventDefault();
