@@ -1,0 +1,55 @@
+import { createBrowserRouter, RouterProvider, type RouteObject } from "react-router";
+import LoginPage from "./pages/LoginPage";
+import { useAuthContext } from "./providers/AuthProvider";
+import ProtectedRoute from "./ProtectedRoute";
+import PeoplePage from "./pages/PeoplePage";
+import ContactsPage from "./pages/ContactsPage";
+import LayoutMain from "./LayoutMain";
+
+export default function Routes() {
+  const { token } = useAuthContext();
+
+  // Rotas disponíveis somente para usuários autenticados
+  const routesForAuthenticatedOnly: RouteObject[] = [
+    {
+      path: "/",
+      element: <ProtectedRoute />, // Componente responsável pela verificação de autenticação
+      children: [
+        {
+          path: "/pessoas",
+          element: <PeoplePage />,
+        },
+        {
+          path: "/contatos",
+          element: <ContactsPage />,
+        },
+        {
+          path: "/logout",
+          element: <div>Logout</div>,
+        },
+      ],
+    },
+  ];
+
+  // Rotas disponíveis apenas para usuários não autenticados
+  const routesForNotAuthenticatedOnly: RouteObject[] = [
+    {
+        path: '/',
+        element: <LayoutMain />,
+        children: [
+            {
+                path: "/login",
+                element: <LoginPage />,
+            }
+        ]
+    }
+  ];
+
+  const router = createBrowserRouter([
+    ...(!token ? routesForNotAuthenticatedOnly : []),
+    ...routesForAuthenticatedOnly,
+  ]);
+
+  // Provide the router configuration using RouterProvider
+  return <RouterProvider router={router} />;
+};
