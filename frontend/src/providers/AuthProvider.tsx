@@ -1,9 +1,11 @@
 import api from "@/services/api";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
+type TokenType = string|null
+
 type AuthContextype = {
-    token: string|null;
-    setToken: (token: string) => void
+    token: TokenType;
+    setToken: (token: TokenType) => void
 }
 
 const AuthContext = createContext<AuthContextype|undefined>(undefined);
@@ -21,9 +23,9 @@ interface AuthProviderProps {
 }
 
 export default function AuthProvider({ children }: AuthProviderProps) {
-    const [token, _setToken] = useState('teste');
+    const [token, _setToken] = useState<TokenType>(null);
 
-    const setToken = (newToken: string) => {
+    const setToken = (newToken: TokenType) => {
         _setToken(newToken);
     };
 

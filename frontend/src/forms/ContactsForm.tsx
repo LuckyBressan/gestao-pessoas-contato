@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import { Button } from "./ui/button";
-import { SelectNative } from "./ui/select-native";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Button } from "../components/ui/button";
+import { SelectNative } from "../components/ui/select-native";
 import type { Person } from "@/@types/People";
 
 import type { Contact } from "@/@types/Contacts";
@@ -13,7 +13,7 @@ import ContactValidator from "@/validators/ContactValidator";
 import { unformatPhone } from "@/utils/contactFormatter";
 import { useContactsContext } from "@/providers/ContactsProvider";
 import { loadPeople } from "@/providers/PeopleProvider";
-import SelectSearch from "./SelectSearch";
+import SelectSearch from "../components/SelectSearch";
 
 export interface ContactsFormProps {
   info?: Contact;

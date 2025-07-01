@@ -1,6 +1,6 @@
 import type { JSX } from "react";
-import PeopleForm, { type PeopleFormProps } from "./PeopleForm";
-import ContactsForm, { type ContactsFormProps } from "./ContactsForm";
+import PeopleForm, { type PeopleFormProps } from "../forms/PeopleForm";
+import ContactsForm, { type ContactsFormProps } from "../forms/ContactsForm";
 
 export interface FormProps {
   contact?: boolean;

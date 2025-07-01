@@ -1,7 +1,15 @@
+import Tabs from "@/components/Tabs";
+import LoginForm from "@/forms/LoginForm";
+
 export default function LoginPage() {
     return (
         <>
-            <h1>Teste</h1>
+            <Tabs 
+                tabs={[
+                    { value: "login", label: "Login", content: <LoginForm /> },
+                    { value: "register", label: "Registrar", content: <div>Registrar</div> },
+                ]}
+            />
         </>
     )
 };
