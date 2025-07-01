@@ -1,0 +1,40 @@
+services:
+
+  postgres:
+    image: postgres:15
+    container_name: postgres-db
+    restart: always
+    env_file: ./.env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - network-gestao
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend-api
+    ports:
+      - "3333:3333"
+    depends_on:
+      - postgres
+    volumes:
+      - ./backend:/app
+    env_file: ./.env
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    networks:
+      - network-gestao
+
+volumes:
+  pgdata:
+
+networks:
+  network-gestao:
