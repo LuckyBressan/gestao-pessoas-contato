@@ -1,69 +1,72 @@
-# React + TypeScript + Vite
+# Gestão de Pessoas & Contatos - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este é o frontend do sistema **Gestão de Pessoas & Contatos**, desenvolvido em **React + TypeScript** utilizando **Vite** para build e desenvolvimento rápido.
 
-Currently, two official plugins are available:
+## Tecnologias Utilizadas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [React 19](https://react.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vitejs.dev/)
+- [TailwindCSS](https://tailwindcss.com/)
+- [Axios](https://axios-http.com/)
+- [React Router v7](https://reactrouter.com/en/main)
+- Outras bibliotecas utilitárias (Radix UI, Lucide, etc.)
 
-## Expanding the ESLint configuration
+## Como rodar o projeto
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 1. Instale as dependências
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+# ou
+yarn install
+# ou
+pnpm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Configure as variáveis de ambiente
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Crie um arquivo .env na raiz do projeto (caso não exista) e defina as variáveis necessárias, por exemplo:
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```env
+VITE_PORT_BACKEND=3333
 ```
+
+Ajuste conforme a porta do seu backend.
+
+### 2. Rode o projeto
+
+```bash
+npm run dev
+# ou
+yarn dev
+# ou
+pnpm dev
+```
+
+Acesse `http://localhost:5173` no seu navegador.
+
+## Scripts disponíveis
+
+- `dev`: Inicia o servidor de desenvolvimento.
+- `build`: Cria uma versão otimizada para produção.
+
+## Estrutura do projeto
+
+- `src`: Código-fonte do projeto.
+  - `components`: Componentes reutilizáveis.
+  - `pages`: Páginas do aplicativo.
+  - `utils`: Funções e classes utilitárias.
+  - `forms` - Formulários
+  - `providers` - Contextos e providers
+  - `services` - Serviços de API
+  - `utils` - Funções utilitárias
+  - `@types` - Tipagens globais
+- `public`: Arquivos públicos estáticos.
+
+## Observações
+
+- O frontend espera que o backend esteja rodando e acessível na porta configurada em VITE_PORT_BACKEND.
+- Para rodar com Docker, utilize o docker-compose na raiz do projeto principal.
+
+---
