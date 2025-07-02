@@ -12,6 +12,7 @@ import { useAlert } from "./AlertProvider";
 import type { Contact } from "@/@types/Contacts";
 import type { ErrorResponse } from "@/@types/Response";
 import type { AxiosError, AxiosResponse } from "axios";
+import { useAuthContext } from "./AuthProvider";
 
 type ContactsContextType = {
   contacts: Contact[];
@@ -40,6 +41,7 @@ interface ContactsProviderProps {
 }
 
 export default function ContactsProvider({ children }: ContactsProviderProps) {
+  const { token } = useAuthContext()
   const [contacts, setContacts] = useState<Contact[]>([]);
 
   const { showAlert } = useAlert()
@@ -166,6 +168,7 @@ export default function ContactsProvider({ children }: ContactsProviderProps) {
   };
 
   useEffect(() => {
+    if(!token) return
     loadContacts();
   }, []);
 

@@ -1,13 +1,20 @@
 "use client"
 
-import { useId, useMemo, useState } from "react"
+import React, { useMemo, useState } from "react"
 import { CheckIcon, EyeIcon, EyeOffIcon, XIcon } from "lucide-react"
 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-export default function InputPassword() {
-  const id = useId()
+interface InputPasswordProps extends React.ComponentProps<'input'> {
+  checkStrengthPassword: boolean
+}
+
+export default function InputPassword({
+  checkStrengthPassword = true,
+  name,
+  ...props
+}: InputPasswordProps) {
   const [password, setPassword] = useState("")
   const [isVisible, setIsVisible] = useState<boolean>(false)
 
@@ -51,16 +58,18 @@ export default function InputPassword() {
   return (
     <div>
       <div className="*:not-first:mt-2">
-        <Label htmlFor={id}>Senha</Label>
+        <Label htmlFor={name}>Senha</Label>
         <div className="relative">
           <Input
-            id={id}
+            id={name}
+            name={name}
             className="pe-9"
             placeholder="Senha"
             type={isVisible ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            aria-describedby={`${id}-description`}
+            aria-describedby={`${name}-description`}
+            {...props}
           />
           <button
             className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
@@ -79,54 +88,60 @@ export default function InputPassword() {
         </div>
       </div>
 
-      <div
-        className="bg-lochmara-100 mt-3 mb-4 h-1 w-full overflow-hidden rounded-full"
-        role="progressbar"
-        aria-valuenow={strengthScore}
-        aria-valuemin={0}
-        aria-valuemax={4}
-        aria-label="Força da senha"
-      >
-        <div
-          className={`h-full ${getStrengthColor(strengthScore)} transition-all duration-500 ease-out`}
-          style={{ width: `${(strengthScore / 4) * 100}%` }}
-        ></div>
-      </div>
-
-      <p
-        id={`${id}-description`}
-        className="text-foreground mb-2 text-sm font-medium"
-      >
-        {getStrengthText(strengthScore)}. Deve conter:
-      </p>
-
-      <ul className="space-y-1.5" aria-label="Requisitos da senha">
-        {strength.map((req, index) => (
-          <li key={index} className="flex items-center gap-2">
-            {req.met ? (
-              <CheckIcon
-                size={16}
-                className="text-emerald-500"
-                aria-hidden="true"
-              />
-            ) : (
-              <XIcon
-                size={16}
-                className="text-muted-foreground/80"
-                aria-hidden="true"
-              />
-            )}
-            <span
-              className={`text-xs ${req.met ? "text-emerald-600" : "text-muted-foreground"}`}
+      {
+        checkStrengthPassword && (
+          <>
+            <div
+              className="bg-lochmara-100 mt-3 mb-4 h-1 w-full overflow-hidden rounded-full"
+              role="progressbar"
+              aria-valuenow={strengthScore}
+              aria-valuemin={0}
+              aria-valuemax={4}
+              aria-label="Força da senha"
             >
-              {req.text}
-              <span className="sr-only">
-                {req.met ? " - Requisito atendido" : " - Requisito não atendido"}
-              </span>
-            </span>
-          </li>
-        ))}
-      </ul>
+              <div
+                className={`h-full ${getStrengthColor(strengthScore)} transition-all duration-500 ease-out`}
+                style={{ width: `${(strengthScore / 4) * 100}%` }}
+              ></div>
+            </div>
+
+            <p
+              id={`${name}-description`}
+              className="text-foreground mb-2 text-sm font-medium"
+            >
+              {getStrengthText(strengthScore)}. Deve conter:
+            </p>
+
+            <ul className="space-y-1.5" aria-label="Requisitos da senha">
+              {strength.map((req, index) => (
+                <li key={index} className="flex items-center gap-2">
+                  {req.met ? (
+                    <CheckIcon
+                      size={16}
+                      className="text-emerald-500"
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <XIcon
+                      size={16}
+                      className="text-muted-foreground/80"
+                      aria-hidden="true"
+                    />
+                  )}
+                  <span
+                    className={`text-xs ${req.met ? "text-emerald-600" : "text-muted-foreground"}`}
+                  >
+                    {req.text}
+                    <span className="sr-only">
+                      {req.met ? " - Requisito atendido" : " - Requisito não atendido"}
+                    </span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
     </div>
   )
 }

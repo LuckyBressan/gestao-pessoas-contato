@@ -67,6 +67,15 @@ export default function ContactsForm({
       return false;
     }
 
+    if(!valueSelectPerson) {
+      const input = e.currentTarget.elements.namedItem(
+        'contact-person'
+      ) as HTMLInputElement;
+      toggleClassInputValid(input, true);
+      input.focus();
+      return false;
+    }
+
     let contact = (
       e.currentTarget.elements.namedItem(
         `contact-descricao`
@@ -96,7 +105,7 @@ export default function ContactsForm({
   const handleBlurContact = (e: React.FocusEvent<HTMLInputElement>) => {
     e.preventDefault();
     const input = e.target;
-    const validator = new ContactValidator(input.value, isTipoTelefone());
+    const validator = new ContactValidator(input.value || '', isTipoTelefone());
     if (!validator.isValid()) {
       setValid({
         valid: false,

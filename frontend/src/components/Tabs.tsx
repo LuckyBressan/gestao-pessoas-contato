@@ -6,14 +6,16 @@ import {
 } from "@/components/ui/tabs"
 
 interface TabsProps {
-  tabs: { value: string; label: string, content: React.ReactNode }[],
+  tabs: { value: string; label: string, content: React.ReactNode }[];
+  tabDefault: string;
 }
 
 export default function Tabs({
-  tabs
+  tabs,
+  tabDefault
 }: TabsProps) {
   return (
-    <TabsComponent defaultValue="tab-1" className="items-center">
+    <TabsComponent defaultValue={tabDefault} className="items-center gap-6">
       <TabsList>
         {tabs.map((tab) => (
           <TabsTrigger value={tab.value}>{tab.label}</TabsTrigger>

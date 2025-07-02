@@ -30,7 +30,7 @@ export default function SectionTable({
       key="section-table"
       className={`
         border border-lochmara-300 p-3 sm:p-6 rounded-xl
-        shadow-2xl flex flex-col gap-6 overflow-hidden
+        shadow-2xl flex flex-col gap-6 overflow-hidden h-max sm:h-full
     `}>
       <span className="flex gap-3">
         <InputFilter
@@ -53,7 +53,7 @@ export default function SectionTable({
             <Form
               props={{
                 ...formProps.props,
-                setOpenDialogForm: setOpenDialog 
+                setOpenDialogForm: setOpenDialog
               }}
               {...formProps }
             />

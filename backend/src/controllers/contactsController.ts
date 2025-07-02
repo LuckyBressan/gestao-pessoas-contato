@@ -16,8 +16,14 @@ const errorDefault = (action: string, error: unknown) => {
 
 
 export const getAllContacts: RequestHandler = async (req, res) => {
-  const contacts = await prisma.contato.findMany()
-  res.json(contacts)
+  try {
+    const contacts = await prisma.contato.findMany()
+    res.json(contacts)
+  } catch(error) {
+    res.status(500).json(
+      errorDefault('listar', error)
+    )
+  }
 }
 
 export const postContact: RequestHandler = async (req, res) => {

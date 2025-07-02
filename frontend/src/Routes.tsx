@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider, type RouteObject } from "react-router";
+import { createBrowserRouter, Navigate, RouterProvider, type RouteObject } from "react-router";
 import LoginPage from "./pages/LoginPage";
 import { useAuthContext } from "./providers/AuthProvider";
 import ProtectedRoute from "./ProtectedRoute";
@@ -7,7 +7,7 @@ import ContactsPage from "./pages/ContactsPage";
 import LayoutMain from "./LayoutMain";
 
 export default function Routes() {
-  const { token } = useAuthContext();
+  const { token, logout } = useAuthContext();
 
   // Rotas disponíveis somente para usuários autenticados
   const routesForAuthenticatedOnly: RouteObject[] = [
@@ -15,6 +15,10 @@ export default function Routes() {
       path: "/",
       element: <ProtectedRoute />, // Componente responsável pela verificação de autenticação
       children: [
+        {
+          index: true,
+          element: <Navigate to="/pessoas" replace />
+        },
         {
           path: "/pessoas",
           element: <PeoplePage />,
@@ -25,7 +29,11 @@ export default function Routes() {
         },
         {
           path: "/logout",
-          element: <div>Logout</div>,
+          action: () => logout()
+        },
+        {
+          path: "/login",
+          element: <Navigate to="/pessoas" replace />
         },
       ],
     },

@@ -61,9 +61,20 @@ const pessoaData = [
   },
 ];
 
+const userData = [
+  {
+    email: 'admin@admin.com',
+    nome : 'admin',
+    senha: 'admin'
+  }
+]
+
 export async function main() {
-  for (const u of pessoaData) {
-    await prisma.pessoa.create({ data: u });
+  for (const p of pessoaData) {
+    await prisma.pessoa.create({ data: p });
+  }
+  for (const u of userData) {
+    await prisma.user.create({ data: u });
   }
 }
 
